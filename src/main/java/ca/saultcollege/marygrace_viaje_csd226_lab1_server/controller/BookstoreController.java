@@ -58,12 +58,32 @@ public class BookstoreController {
                 "  </div>\n" +
                 "  <div>\n" +
                 "    <h2> 2. Click submit</h2>\n" +
-                "  </div>\n"
+                "  </div>\n" +
+                "  <br>"
                 ;
 
+        String itemContent = "<h1> See the list of items available to CSD226 Bookstore</h1>\n" +
+                "  <div>\n"
+                ;
+
+        // Retrieve the list of items directly from the injected Items object
+        Items.Item[] itemList = items.getItems();
+
+        // Generate HTML to display the items
+        StringBuilder itemListHtml = new StringBuilder();
+        itemListHtml.append("<ul>");
+        for (Items.Item item : itemList) {
+
+            itemListHtml.append("<li>").append(item.getName()).append("</li>");
+            itemListHtml.append("<li>").append(item.getDescription()).append("</li>");
+            itemListHtml.append("<br>");
+        }
+        itemListHtml.append("</ul>");
 
 
-        return ResponseEntity.ok(homeContent);
+
+
+        return ResponseEntity.ok(homeContent + itemContent +itemListHtml.toString());
     }
 //    @GetMapping("/about")
 //    public ResponseEntity<String> getAbout(){ // map a URL to a method
@@ -127,22 +147,25 @@ public class BookstoreController {
     @GetMapping("/staff")
     public ResponseEntity<String> getStaffPage() {
         // Replace this string with the content you want to display on the About page
-        String staffContent = "<h1>Welcome to Staff Portal</h1><p>See List of Items Available!</p>";
+        String adminContent = "<h1>Welcome to Staff Portal</h1><p>See List of Items Available!</p>";
 
-        List<String> itemList = new ArrayList<>();
-        itemList.add("item1");
-        itemList.add("item2");
-        itemList.add("item3");
-        itemList.add("item4");
+        // Retrieve the list of items directly from the injected Items object
+        Items.Item[] itemList = items.getItems();
+
+        // Generate HTML to display the items
+        StringBuilder itemListHtml = new StringBuilder();
+        itemListHtml.append("<ul>");
+        for (Items.Item item : itemList) {
+            itemListHtml.append("<li>").append(item.getName()).append("</li>");
+            itemListHtml.append("<li>").append(item.getDescription()).append("</li>");
+            itemListHtml.append("<br>");
+        }
+        itemListHtml.append("</ul>");
 
         String editItem = "<h2>Choose Item to edit:</h2>\n<form hx-post=\"/editItem\" hx-target=\"this\" hx-swap=\"outerHTML\">\n" +
                 "    <div>\n" +
                 "        <label>Item Name</label>\n" +
                 "        <input type=\"text\" name=\"itemName\" value=\"\">\n" +
-                "    </div>\n" +
-                "    <div class=\"form-group\">\n" +
-                "        <label>Item Price</label>\n" +
-                "        <input type=\"text\" name=\"itemPrice\" value=\"\">\n" +
                 "    </div>\n" +
                 "    <div class=\"form-group\">\n" +
                 "        <label>Item Description</label>\n" +
@@ -159,7 +182,7 @@ public class BookstoreController {
                 "    <button class=\"btn\">Delete Item</button>\n" +
                 "</form>";
 
-        return ResponseEntity.ok(staffContent +  itemList.toString() + "\n"+ "\n" + editItem + deleteItem);
+        return ResponseEntity.ok(adminContent +  itemListHtml.toString() + "\n"+ "\n" + editItem + deleteItem);
     }
     @GetMapping("/publiccontent2")
     public Content getPublicContent2(){ // map a URL to a method
